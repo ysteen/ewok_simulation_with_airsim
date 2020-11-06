@@ -211,7 +211,7 @@ class UniformBSpline3D {
                               int id, const Eigen::Vector3d & color, int fixed_id = -_N, int num_points = 0,
                               const Eigen::Vector3d & fixed_color = Eigen::Vector3d(1,1,1), _Scalar ddt = 0.1,
                               const ros::Duration & lifetime = ros::Duration(0), _Scalar scale = 0.01) {
-    traj_marker.header.frame_id = "world";
+    traj_marker.header.frame_id = "world_enu"; //수정
     traj_marker.ns = ns;
     traj_marker.id = id;
     traj_marker.type = visualization_msgs::Marker::LINE_STRIP;
@@ -267,7 +267,7 @@ class UniformBSpline3D {
                               int id, const Eigen::Vector3d & color, int fixed_id = -N, int num_points = 0,
                               const Eigen::Vector3d & fixed_color = Eigen::Vector3d(1,1,1),
                               const ros::Duration & lifetime = ros::Duration(0), _Scalar scale = 0.1) {
-    traj_marker.header.frame_id = "world";
+    traj_marker.header.frame_id = "world_enu"; //수정
     traj_marker.ns = ns;
     traj_marker.id = id;
     traj_marker.type = visualization_msgs::Marker::SPHERE_LIST;

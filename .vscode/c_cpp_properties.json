@@ -1,0 +1,34 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/rise/catkin_ws/devel/include/**",
+                "/home/rise/airsim/AirSim/ros/devel/include/**",
+                "/opt/ros/melodic/include/**",
+                "/home/rise/airsim/AirSim/ros/src/airsim_ros_pkgs/include/**",
+                "/home/rise/catkin_ws/src/ewok/ewok_optimization/include/**",
+                "/home/rise/catkin_ws/src/ewok/ewok_poly_spline/include/**",
+                "/home/rise/catkin_ws/src/ewok/ewok_ring_buffer/include/**",
+                "/home/rise/catkin_ws/src/ewok/ewok_simulation/include/**",
+                "/home/rise/catkin_ws/src/ewok/mav_comm/mav_msgs/include/**",
+                "/home/rise/catkin_ws/src/ewok/mav_comm/mav_planning_msgs/include/**",
+                "/home/rise/catkin_ws/src/ewok/octomap_rviz_plugins/include/**",
+                "/home/rise/catkin_ws/src/ewok/rotors_simulator/rotors_control/include/**",
+                "/home/rise/catkin_ws/src/ewok/rotors_simulator/rotors_gazebo_plugins/include/**",
+                "/home/rise/catkin_ws/src/ewok/rotors_simulator/rotors_hil_interface/include/**",
+                "/home/rise/catkin_ws/src/ewok/rotors_simulator/rotors_joy_interface/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/opt/gcc-arm-none-eabi-9-2020-q2-update/bin/arm-none-eabi-gcc",
+            "cStandard": "gnu18",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}

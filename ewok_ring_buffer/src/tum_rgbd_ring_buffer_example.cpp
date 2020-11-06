@@ -217,7 +217,7 @@ void processImage(const cv::Mat & img, const Eigen::Matrix4f & T_w_c)
       octomap_msgs::Octomap msg;
       octomap_msgs::binaryMapToMsg(tree, msg);
       msg.header.stamp = ros::Time::now();
-      msg.header.frame_id = "world";
+      msg.header.frame_id = "world_enu";//수정
       octomap_pub.publish(msg);
       std::cout << std::endl;
     }

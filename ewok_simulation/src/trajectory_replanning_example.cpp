@@ -115,8 +115,7 @@ void depthImageCallback(const sensor_msgs::Image::ConstPtr& msg)
     for(int u=0; u < cv_ptr->image.cols; u+=4) {
         for(int v=0; v < cv_ptr->image.rows; v+=4) {
             float val = data[v*cv_ptr->image.cols + u];
-
-            //ROS_INFO_STREAM(val);
+            ROS_INFO_STREAM(cv_ptr->image.cols);
 
             if(std::isfinite(val)) {
                 Eigen::Vector4f p;
