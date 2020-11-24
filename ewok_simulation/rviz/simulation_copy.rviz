@@ -229,7 +229,7 @@ Visualization Manager:
       Name: Current View
       Near Clip Distance: 0.00999999978
       Pitch: 1.20539796
-      Target Frame: quadrotor/base_link
+      Target Frame: front_left_custom_body/static
       Value: Orbit (rviz)
       Yaw: 2.62539744
     Saved: ~

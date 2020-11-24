@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#2020 Edited by Seunghyun Yu, Korea
 
 import rospy
 import mavros
@@ -18,10 +19,12 @@ def state_cb(bad):
     global current_state
     current_state = bad
 
+# current position data
 def cur_pos(data_local):
     global local_current_pos
     local_current_pos = data_local
 
+# reading command/pose data
 def target_pos(target_data):
     global real_target
     real_target = target_data
@@ -51,6 +54,7 @@ def position_control():
     last_request = rospy.get_rostime()
     while not rospy.is_shutdown():
         now = rospy.get_rostime()
+        # makes drone offboard and arming mode
         if current_state.mode != "OFFBOARD" and (now - last_request > rospy.Duration(5.)):
             set_mode_client(base_mode=0, custom_mode="OFFBOARD")
             last_request = now 

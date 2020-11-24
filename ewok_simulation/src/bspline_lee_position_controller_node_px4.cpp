@@ -4,7 +4,8 @@
  * Copyright 2015 Mina Kamel, ASL, ETH Zurich, Switzerland
  * Copyright 2015 Janosch Nikolic, ASL, ETH Zurich, Switzerland
  * Copyright 2015 Markus Achtelik, ASL, ETH Zurich, Switzerland
- *
+ * 2020 Edited by Seunghyun Yu, Korea
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -67,6 +68,7 @@ void BSplineLeePositionControllerNode::InitializeParams() {
   ros::NodeHandle pnh("~");
 
   // Read parameters from rosparam.
+  // 원래는 gazebo파라미터 설정 부분, px4사용시 불필요
   ROS_INFO("InitializeParams2");
 }
 
@@ -121,8 +123,8 @@ void BSplineLeePositionControllerNode::OdometryCallback(const nav_msgs::Odometry
   //ROS_INFO_STREAM("Number of times: " << segment_start_times_.size());
   //ROS_INFO_STREAM("Setting point: " << command_trajectory.position_W.transpose());
 
-//odometry 설정
-  
+  //계산된 position과 orientation 퍼블리시(command_trajectory)
+  //eigen vector3d 형태의 orientation과 position을 geometry_msgs로 바꿔줌
     geometry_msgs::PoseStamped pose;
     tf::pointEigenToMsg(command_trajectory.position_W,pose.pose.position);
     tf::quaternionEigenToMsg(command_trajectory.orientation_W_B, pose.pose.orientation);
@@ -130,7 +132,8 @@ void BSplineLeePositionControllerNode::OdometryCallback(const nav_msgs::Odometry
     pose_pub = nh.advertise<geometry_msgs::PoseStamped> ("command/pose", 10);
     pose_pub.publish(pose);
 
-    /*
+  /*
+  // gazebo 모터 엑츄에이터 설정, px4에서 불필요
   lee_position_controller_.SetOdometry(odometry);
 
   Eigen::VectorXd ref_rotor_velocities;

@@ -3,6 +3,7 @@
 *
 * Copyright 2017 Vladyslav Usenko, Technical University of Munich.
 * Developed by Vladyslav Usenko <vlad dot usenko at tum dot de>,
+* 2020 Edited by Seunghyun Yu, Korea
 * for more information see <http://vision.in.tum.de/research/robotvision/replanning>.
 * If you use this code, please cite the respective publications as
 * listed on the above website.
@@ -79,16 +80,16 @@ void depthImageCallback(const sensor_msgs::Image::ConstPtr& msg)
         return;
     }
 
-    const float fx = 336.0;
-    const float fy = 336.0;
-    const float cx = 336.0;
-    const float cy = 188.0;
+    const float fx = 320.0;
+    const float fy = 320.0;
+    const float cx = 320.0;
+    const float cy = 240.0;
 
     tf::StampedTransform transform;
 
 
     try{
-
+        // 좌표 바꾸는 부분, gazebo사용시 world 사용, airsim 사용시 world_enu로 수정, 수정 검색해서 전부 하나로 통일
         listener->lookupTransform("world_enu", "front_left_custom_optical/static",//msg->header.frame_id,
                                   msg->header.stamp, transform);
     }
@@ -103,7 +104,7 @@ void depthImageCallback(const sensor_msgs::Image::ConstPtr& msg)
     tf::transformTFToEigen(transform, dT_w_c);
 
     Eigen::Affine3f T_w_c = dT_w_c.cast<float>();
-    std::cout << T_w_c.translation()<< std::endl;
+    //std::cout << T_w_c.translation()<< std::endl;
 
     float * data = (float *) cv_ptr->image.data;
 
@@ -247,16 +248,17 @@ int main(int argc, char** argv){
 
     current_traj_pub = nh.advertise<visualization_msgs::MarkerArray>("optimal_trajectory", 1, true);
 
-
+    // depth 이미지 받는 부분
     message_filters::Subscriber<sensor_msgs::Image> depth_image_sub_ ;
     depth_image_sub_.subscribe(nh, "/quadrotor/airsim_node/drone_2/front_left_custom/DepthPlanner", 5);
 
+    // 좌표 바꾸는 부분, gazebo사용시 world 사용, airsim 사용시 world_enu로 수정
     tf::MessageFilter<sensor_msgs::Image> tf_filter_(depth_image_sub_, *listener, "world_enu", 5);
     tf_filter_.registerCallback(depthImageCallback);
 
-
+    //속도, 가속도, 경로 조절
     double max_velocity, max_acceleration;
-    pnh.param("max_velocity", max_velocity, 1.0);
+    pnh.param("max_velocity", max_velocity, 1.5);
     pnh.param("max_acceleration", max_acceleration, 5.0);
 
     Eigen::Vector4d limits(max_velocity, max_acceleration, 0, 0);
@@ -305,9 +307,43 @@ int main(int argc, char** argv){
     {
         typename ewok::Polynomial3DOptimization<10>::Vector3Array path;
 
+        //경로를 바꾸려면 이 부분 바꿔야함
+
+        // path.push_back(Eigen::Vector3d(start_x, start_y, start_z));
+        // path.push_back(Eigen::Vector3d(middle_x, middle_y, middle_z));
+        // path.push_back(Eigen::Vector3d(stop_x, stop_y, stop_z));
+
+        // path.push_back(Eigen::Vector3d(start_x, start_y, start_z));
+        // path.push_back(Eigen::Vector3d(10.7, -1.1, 0.9));
+        // path.push_back(Eigen::Vector3d(78.1, -1.1, 4.8));
+        // path.push_back(Eigen::Vector3d(95.0, 0.4, 3.7));
+        // path.push_back(Eigen::Vector3d(110.0, 0.4, 3.7));
+        // path.push_back(Eigen::Vector3d(110.0, 0.4, 4.6));
+        // path.push_back(Eigen::Vector3d(78.1, -1.1, 4.8));
+        // path.push_back(Eigen::Vector3d(10.7, -1.1, 1.8));
+        // path.push_back(Eigen::Vector3d(0.0, 0.0, 2.0));
+        // path.push_back(Eigen::Vector3d(0.0, 25.0, 2.0));
+        // path.push_back(Eigen::Vector3d(3.4, 53.4, 3.5));
+        // path.push_back(Eigen::Vector3d(4.2, 84.0, 4.2));
+        // path.push_back(Eigen::Vector3d(0.6, 110.4, 4.9));
+        // path.push_back(Eigen::Vector3d(2.4, 110.4, 4.9));
+        // path.push_back(Eigen::Vector3d(4.2, 84.0, 4.2));
+        // path.push_back(Eigen::Vector3d(3.4, 53.4, 3.5));
+        // path.push_back(Eigen::Vector3d(0.0, 0.0, 0.0));
+        
         path.push_back(Eigen::Vector3d(start_x, start_y, start_z));
-        path.push_back(Eigen::Vector3d(middle_x, middle_y, middle_z));
-        path.push_back(Eigen::Vector3d(stop_x, stop_y, stop_z));
+        path.push_back(Eigen::Vector3d(1.49, -18.7, 2.55));
+        path.push_back(Eigen::Vector3d(9.11, -30.38, 4.0));
+        path.push_back(Eigen::Vector3d(31.18, -31.28, 2.81));
+        path.push_back(Eigen::Vector3d(54.30, -26.69, 4.0));
+        path.push_back(Eigen::Vector3d(66.95, -7.12, 4.0));
+        path.push_back(Eigen::Vector3d(66.95, 13.01, 4.0));
+        path.push_back(Eigen::Vector3d(61.36, 24.22, 4.0));
+        path.push_back(Eigen::Vector3d(46.43, 30.36, 4.0));
+        path.push_back(Eigen::Vector3d(22.03, 30.36, 4.0));
+        path.push_back(Eigen::Vector3d(6.05, 28.28, 4.0));
+        path.push_back(Eigen::Vector3d(0.0, 0.0, 0.0));
+
 
         traj = to.computeTrajectory(path);
 

@@ -11,7 +11,7 @@
 
 
   <arg name="start_x" value="0.0"/>
-  <arg name="start_y" value=".0"/>
+  <arg name="start_y" value="0.0"/>
   <arg name="start_z" value="1.0"/>
   <arg name="start_yaw" value="$(eval -pi/4)"/>
 
@@ -44,8 +44,9 @@
       <arg name="x" value="$(arg start_x)"/>
       <arg name="y" value="$(arg start_y)"/> -->
     </include>
+    <!-- 내부에서 mavros연결시 -->
     <include file="$(find mavros)/launch/px4.launch">
-      <arg name="fcu_url" value="udp://:14550@192.168.1.36:14557" />
+      <arg name="fcu_url" value="udp://:14550@localhost:14557" />
     </include>
     <node name="offb_node" pkg="ewok_simulation" type="offb_node.py" output="screen">
 
@@ -54,6 +55,7 @@
       <rosparam command="load" file="$(find rotors_gazebo)/resource/lee_controller_hummingbird.yaml" />
       <rosparam command="load" file="$(find rotors_gazebo)/resource/hummingbird.yaml" />
       <param name="dt" value="$(arg dt)" />
+      <!-- mavros odometry -->
       <remap from="odometry" to="/quadrotor/mavros/local_position/odom" />
     </node>
 
